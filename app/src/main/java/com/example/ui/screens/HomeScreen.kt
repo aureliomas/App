@@ -45,7 +45,6 @@ fun HomeScreen(
     onNavigateToInventory: () -> Unit,
     onNavigateToBilling: () -> Unit,
     onNavigateToAutomations: () -> Unit,
-    onNavigateToPromoWeb: () -> Unit = {},
     onOpenAddAppointmentDialog: () -> Unit,
     onOpenAddPatientDialog: () -> Unit,
     onOpenAddInvoiceDialog: () -> Unit
@@ -160,58 +159,7 @@ fun HomeScreen(
             }
         }
 
-        // Promotional Web Page Shortcut Card
-        item {
-            Card(
-                onClick = onNavigateToPromoWeb,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF0F172A)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = Color(0xFF0D9488),
-                            modifier = Modifier.size(42.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Icon(Icons.Default.Language, contentDescription = null, tint = Color.White)
-                            }
-                        }
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column {
-                            Text(
-                                text = "🌐 Página Web Informativa Pacientes",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "Ver oferta 2x1, WhatsApp, llamadas y agendado directo",
-                                color = Color(0xFF94A3B8),
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
-                    }
-                    Icon(
-                        imageVector = Icons.Default.ChevronRight,
-                        contentDescription = null,
-                        tint = Color(0xFF2DD4BF)
-                    )
-                }
-            }
-        }
+        // Active Session & Role Status Banner
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),

@@ -35,7 +35,6 @@ import com.example.ui.theme.OpticaCareTheme
 
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
     object Home : Screen("home", "Inicio", Icons.Default.Home)
-    object PromoWeb : Screen("promo_web", "Página Web", Icons.Default.Language)
     object Appointments : Screen("appointments", "Citas", Icons.Default.CalendarMonth)
     object Patients : Screen("patients", "Pacientes", Icons.Default.People)
     object Inventory : Screen("inventory", "Inventario", Icons.Default.Inventory2)
@@ -118,7 +117,6 @@ class MainActivity : ComponentActivity() {
                                         onNavigateToInventory = { currentScreen = Screen.Inventory },
                                         onNavigateToBilling = { currentScreen = Screen.Billing },
                                         onNavigateToAutomations = { currentScreen = Screen.Automations },
-                                        onNavigateToPromoWeb = { currentScreen = Screen.PromoWeb },
                                         onOpenAddAppointmentDialog = { showAddAppointmentDialog = true },
                                         onOpenAddPatientDialog = { showAddPatientDialog = true },
                                         onOpenAddInvoiceDialog = { showAddInvoiceDialog = true }
@@ -153,10 +151,6 @@ class MainActivity : ComponentActivity() {
                                     )
 
                                     Screen.Automations -> AutomationsScreen(
-                                        viewModel = viewModel
-                                    )
-
-                                    Screen.PromoWeb -> PromoWebScreen(
                                         viewModel = viewModel
                                     )
                                 }
@@ -358,7 +352,6 @@ fun OpticaBottomNavigationBar(
 ) {
     val screens = listOf(
         Screen.Home,
-        Screen.PromoWeb,
         Screen.Appointments,
         Screen.Patients,
         Screen.Inventory,

@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.CashCut
 import com.example.data.model.Invoice
 import com.example.ui.OpticaViewModel
-import com.example.ui.components.FacturacionElectronicaModule
 import com.example.ui.components.TicketDialog
 import com.example.util.TicketPdfHelper
 import java.text.NumberFormat
@@ -47,7 +46,6 @@ fun BillingScreen(
     var selectedTabIndex by remember { mutableStateOf(0) }
     var searchQuery by remember { mutableStateOf("") }
     var selectedInvoiceForPayment by remember { mutableStateOf<Invoice?>(null) }
-    var showFacturacionInvoice by remember { mutableStateOf<Invoice?>(null) }
     var showCashCutConfirmDialog by remember { mutableStateOf<String?>(null) } // "CORTE_X" or "CORTE_Z"
 
     val totalCollected = remember(invoices) { invoices.sumOf { it.amountPaid } }
@@ -128,12 +126,6 @@ fun BillingScreen(
                         onClick = { selectedTabIndex = 1 },
                         text = { Text("Corte de Caja (X/Z)", fontWeight = FontWeight.Bold) },
                         icon = { Icon(Icons.Default.AccountBalanceWallet, contentDescription = null) }
-                    )
-                    Tab(
-                        selected = selectedTabIndex == 2,
-                        onClick = { selectedTabIndex = 2 },
-                        text = { Text("Facturación PAC (CFDI)", fontWeight = FontWeight.Bold) },
-                        icon = { Icon(Icons.Default.ReceiptLong, contentDescription = null) }
                     )
                 }
             }
@@ -229,14 +221,13 @@ fun BillingScreen(
                                     currencyFormatter = currencyFormatter,
                                     onRecordPaymentClick = { selectedInvoiceForPayment = invoice },
                                     onViewTicketClick = { viewModel.showTicketPreview(invoice) },
-                                    onShareWhatsApp = { viewModel.sendTicketWhatsApp(context, invoice) },
-                                    onFacturarCfdiClick = { showFacturacionInvoice = invoice }
+                                    onShareWhatsApp = { viewModel.sendTicketWhatsApp(context, invoice) }
                                 )
                             }
                         }
                     }
                 }
-            } else if (selectedTabIndex == 1) {
+            } else {
                 // --- TAB 1: CORTE DE CAJA (CORTE X / CORTE Z) ---
                 LazyColumn(
                     modifier = Modifier
@@ -364,30 +355,8 @@ fun BillingScreen(
                         }
                     }
                 }
-            } else {
-                // --- TAB 2: FACTURACIÓN ELECTRÓNICA CFDI 4.0 (PAC) ---
-                FacturacionElectronicaModule(viewModel = viewModel)
             }
         }
-    }
-
-    // Modal Facturación CFDI for Selected Invoice
-    showFacturacionInvoice?.let { invoice ->
-        AlertDialog(
-            onDismissRequest = { showFacturacionInvoice = null },
-            properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(12.dp),
-            confirmButton = {},
-            text = {
-                FacturacionElectronicaModule(
-                    viewModel = viewModel,
-                    prefillInvoice = invoice,
-                    onCloseDialog = { showFacturacionInvoice = null }
-                )
-            }
-        )
     }
 
     // Modal Ticket Dialog Preview
@@ -462,8 +431,7 @@ fun InvoiceCard(
     currencyFormatter: NumberFormat,
     onRecordPaymentClick: () -> Unit,
     onViewTicketClick: () -> Unit,
-    onShareWhatsApp: () -> Unit,
-    onFacturarCfdiClick: () -> Unit = {}
+    onShareWhatsApp: () -> Unit
 ) {
     val dateStr = remember(invoice.date) {
         SimpleDateFormat("dd/MM/yyyy - hh:mm a", Locale("es", "MX")).format(Date(invoice.date))
